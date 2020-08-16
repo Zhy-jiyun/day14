@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoshu.dao.GoodMapper">
+  	<select id="findList" resultType="goodVo" parameterType="goodVo">
+  		SELECT g.*,t.typename as tname  FROM good g,goodtype t 
+  			<where>
+  				t.id=g.typeid
+  				<if test="name !=null and name!=''">
+  				and	name like '%${name}%'
+  				</if>
+  				<if test="typeid !=null and typeid!=0">
+  				and	typeid = #{typeid}
+  				</if>
+  				<if test="createtime1 !=null">
+  				and createtime &gt;= #{createtime1}
+  				</if>
+  				<if test="createtime2 !=null">
+  				and createtime &lt;= #{createtime2}
+  				</if>
+  			</where>
+  	</select>
+  	<select id="findCount" resultType="goodVo">
+  		SELECT t.typename AS tname , COUNT(t.id) AS num FROM goodtype t LEFT JOIN good g ON g.typeid=t.id GROUP BY t.id
+  	</select>
+</mapper>
